@@ -24,6 +24,23 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>  
-</body>  
+<body onload="setupAssignment();">
+  <div class="container headerBar">
+      <h1>Explicit Renditions of Implicit Surfaces</h1>
+  </div>
+  <div class="container contentWrapper">
+      <div class="pageContent">
+          <div class="canvas-container">
+      <canvas id="task" width="820" height="461"></canvas>
+          </div>
+      </div>
+  </div>
+  <script>
+      function setupAssignment() {
+          setupTask("task-1", Task1);
+    setupTask("task-2", Task2);
+    setupTask("task-3", Task3);
+  }
+  </script>
+</body>
 </html>
