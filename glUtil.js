@@ -1,4 +1,5 @@
 
+
 function setupTask(canvasID, taskFunction) {
     var canvas = document.getElementById(canvasId);
     if (!canvas) {
