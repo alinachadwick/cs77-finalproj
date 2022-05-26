@@ -13,6 +13,7 @@ body{
 	background-position: top center !important;*/
 	background-attachment: fixed;
 	font-size: 14px;
+	text-align: center;
 }
 
 canvas { 
