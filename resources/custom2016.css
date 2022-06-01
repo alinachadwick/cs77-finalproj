@@ -11,6 +11,11 @@ body{
 	font-size: 14px;
 	text-align: center;
 }
+
+#scene {
+
+    text-align: center;
+}
 .slider-container {
     margin: 10px auto;
     padding: 0 10px;
