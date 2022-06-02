@@ -6,14 +6,19 @@ body{
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 300;
 	padding-top: 0 !important;
-	background-color:#000000;
+	background-color:#ffffff;
+    color:#181818;
 	background-attachment: fixed;
 	font-size: 14px;
 	text-align: center;
 }
 
-#scene {
+body::-webkit-scrollbar {
 
+    display: none;
+}
+
+.scene_canvas {
     text-align: center;
 }
 .slider-container {
@@ -93,7 +98,7 @@ body.Courses, body.Papers, body.Talks{
 /* start header classes */
 
 .headerBar{
-	background-color: rgb(199, 231, 250);
+	background-color: rgb(255, 255, 255);
 	height: 95px;
 	margin-bottom: 10px;
 }

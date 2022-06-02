@@ -1,16 +1,19 @@
 const renderer = new THREE.WebGLRenderer();
-    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
-    const scene = new THREE.Scene();
-    var Mesh;
-    var light;
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+const scene = new THREE.Scene();
+const canvas = document.querySelector('scene_canvas');
+var Mesh;
+var light;
 
-    function init() {
-        scene.background = new THREE.Color('white');
-        camera.position.set(0, 10, 20);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
+function init() {
+    scene.background = new THREE.Color('white');
+    camera.position.set(0, 10, 20);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    document.body.appendChild(renderer.domElement);
+    
 
-        const fragmentShader = `
+    const fragmentShader = `
         // pre-defined constants
         #define EPSILON 1e-4
         #define PI 3.1415926535897932384626433832795
@@ -54,7 +57,7 @@ const renderer = new THREE.WebGLRenderer();
         // returns the signed distance to a sphere from position p
         float sdSphere(vec3 p, float r)
         {
-             return length(p) - r;
+            return length(p) - r;
         }
         
         // returns the signed distance to a box from position p
@@ -207,7 +210,7 @@ const renderer = new THREE.WebGLRenderer();
             
             dist = sdPlane(p.xzy, -0.15);
             
-               
+            
             dist = opSmoothUnion(dist, sdSphere(vec3(p.x+0.20, p.y, p.z), 0.20), 0.01);
             
             dist = opSmoothUnion(dist, sdSphere(vec3(p.x+0.20, p.y-0.2, p.z-0.1), 0.1), 0.01);
@@ -403,89 +406,102 @@ const renderer = new THREE.WebGLRenderer();
 
         void mainImage(out vec4 fragColor, in vec2 fragCoord)
         {
-            fragColor = vec4(render(render_settings, fragCoord), 1.0);
+            gl_fragColor = vec4(render(render_settings, fragCoord), 1.0);
         }
-        `;
+    `;
 
-        const uniforms = {
-            iTime: { value: 0 },
-            iResolution:  { value: new THREE.Vector3() },
-        };
-        const material_one = new THREE.ShaderMaterial({
-            fragmentShader,
-            uniforms,
-          });
-
-        const geometry_one = new THREE.SphereGeometry(100, 64, 32);
-        
-
-        const plane_one =  new THREE.Mesh(geometry_one, material_one);
-        scene.add( plane_one );
-        plane_one.position.y = 10;
-    
-        function resizeRendererToDisplaySize(renderer) {
-            const canvas = renderer.domElement;
-            const width = canvas.clientWidth;
-            const height = canvas.clientHeight;
-            const needResize = canvas.width !== width || canvas.height !== height;
-            if (needResize) {
-            renderer.setSize(width, height, false);
-            }
-            return needResize;
-        }
-    
-        function render() {
-            time *= 0.001;  // convert to seconds
-
-            resizeRendererToDisplaySize(renderer);
-
-            const canvas = renderer.domElement;
-            uniforms.iResolution.value.set(canvas.width, canvas.height, 1);
-            uniforms.iTime.value = time;
-
-            renderer.render(scene, camera);
-
-            requestAnimationFrame(render);
-        }
-
-    requestAnimationFrame(render);
-    }
-
-    function setLight() {
-        light = new THREE.AmbientLight(0xffffff); // soft white light
-        scene.add(light);
-    }
-
-    function loadGLTF() {
-        var sceneLoader = new THREE.GLTFLoader();
-
-        sceneLoader.load('./the_room.gltf', (gltf) => {
-            Mesh = gltf.scene;
-            Mesh.scale.set(0.9,0.9,0.9);
-            scene.add(Mesh);
-            Mesh.position.x = -0.7;
-            Mesh.position.y = 6.5;
-            Mesh.position.z = 4;
-            Mesh.rotation.y -=4.7;
-            
+    const uniforms = {
+        iTime: { value: 0 },
+        iResolution:  { value: new THREE.Vector3() },
+    };
+    const material_one = new THREE.ShaderMaterial({
+        fragmentShader,
+        uniforms,
         });
-        
-    }
-    function animate() {
-        requestAnimationFrame(animate);
-        const geometry_two = new THREE.PlaneGeometry( 10,  10);
-      
-        const material_two = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-        const plane_two = new THREE.Mesh( geometry_two, material_two );
-        scene.add( plane_two );
-        plane_two.position.y = 10;
-        // if (Mesh && Mesh.rotation) {
-        //     Mesh.rotation.y -= 0.01;
-        // }
-        renderer.render(scene, camera);
+
+    const geometry_one = new THREE.SphereGeometry(100, 64, 32);
+    
+
+    const plane_one =  new THREE.Mesh(geometry_one, material_one);
+    scene.add( plane_one );
+    plane_one.position.y = 10;
+
+    //const controls = new THREE.OrbitControls(camera);
+    // controls.enableZoom = false;
+    // controls.enableDamping = true;
+
+    // const tick = () => {
+    //     renderer.render(scene, camera);
+    //     window.requestAnimationFrame(tick);
+    //     controls.update();
+    // };
+    
+
+
+    function resizeRendererToDisplaySize(renderer) {
+        const canvas = renderer.domElement;
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        const needResize = canvas.width !== width || canvas.height !== height;
+        if (needResize) {
+        renderer.setSize(width, height, false);
+        }
+        return needResize;
     }
 
-    init();
-    setLight();
-    loadGLTF();
-    animate();
+    function render() {
+        time *= 0.001;  // convert to seconds
+
+        resizeRendererToDisplaySize(renderer);
+
+        const canvas = renderer.domElement;
+        uniforms.iResolution.value.set(canvas.width, canvas.height, 1);
+        uniforms.iTime.value = time;
+
+        renderer.render(scene, camera);
+
+        requestAnimationFrame(render);
+    }
+
+requestAnimationFrame(render);
+}
+
+function setLight() {
+    light = new THREE.AmbientLight(0xffffff); // soft white light
+    scene.add(light);
+}
+
+function loadGLTF() {
+    var sceneLoader = new THREE.GLTFLoader();
+
+    sceneLoader.load('./the_room.gltf', (gltf) => {
+        Mesh = gltf.scene;
+        Mesh.scale.set(0.9,0.9,0.9);
+        scene.add(Mesh);
+        Mesh.position.x = -0.7;
+        Mesh.position.y = 6.5;
+        Mesh.position.z = 4;
+        Mesh.rotation.y -=4.7;
+        
+    });
+    
+}
+function animate() {
+    requestAnimationFrame(animate);
+    const geometry_two = new THREE.PlaneGeometry( 10,  10);
+    
+    const material_two = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+    const plane_two = new THREE.Mesh( geometry_two, material_two );
+    scene.add( plane_two );
+    plane_two.position.y = 10;
+    if (Mesh && Mesh.rotation) {
+        camera.rotation.y -= 0.1;
+    }
+    renderer.render(scene, camera);
+}
+
+init();
+setLight();
+loadGLTF();
+animate();
+// tick();
