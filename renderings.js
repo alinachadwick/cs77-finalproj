@@ -466,23 +466,8 @@ const renderer = new THREE.WebGLRenderer();
             Mesh.position.x = -0.7;
             Mesh.position.y = 6.5;
             Mesh.position.z = 4;
-            Mesh.rotation.y -=4.7;
-            
-        });
-        
-    }
-    function animate() {
-        requestAnimationFrame(animate);
-        const geometry_two = new THREE.PlaneGeometry( 10,  10);
-      
-        const material_two = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
-        const plane_two = new THREE.Mesh( geometry_two, material_two );
-        scene.add( plane_two );
-        plane_two.position.y = 10;
-        // if (Mesh && Mesh.rotation) {
-        //     Mesh.rotation.y -= 0.01;
-        // }
-        renderer.render(scene, camera);
+            Mesh.rotation.y -=4.7;   
+        });   
     }
 
     init();
