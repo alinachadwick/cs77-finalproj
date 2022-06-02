@@ -12,10 +12,14 @@ body{
 	text-align: center;
 }
 
+body::-webkit-scrollbar {
+	display: none;
+
+}
+
 #scene {
-		width: 100%;
     text-align: center;
-		overflow: none;
+		overflow-x: hidden;
 }
 
 .slider-container {
