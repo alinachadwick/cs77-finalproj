@@ -6,16 +6,18 @@ body{
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 300;
 	padding-top: 0 !important;
-	background-color:#000000;
+	background-color:#ffffff;
 	background-attachment: fixed;
 	font-size: 14px;
 	text-align: center;
 }
 
 #scene {
-
+		width: 100%;
     text-align: center;
+		overflow: none;
 }
+
 .slider-container {
     margin: 10px auto;
     padding: 0 10px;
@@ -93,7 +95,8 @@ body.Courses, body.Papers, body.Talks{
 /* start header classes */
 
 .headerBar{
-	background-color: rgb(199, 231, 250);
+	background-color: rgb(255, 255, 255);
+	color:rgb(0, 0, 0);
 	height: 95px;
 	margin-bottom: 10px;
 }
