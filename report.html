@@ -9,6 +9,9 @@
 
     <link href="resources/bootstrap.min.css" rel="stylesheet">
     <link href="resources/custom2016.css" rel="stylesheet">
+    <script src="glUtil.js"></script>
+    <script src="uiUtil.js"></script>
+    <script src="./renderings.js"></script>
     
     <!-- scripts go here -->
 	<!-- <script src="common.js"></script>
@@ -35,9 +38,12 @@
   <script src="https://cdn.rawgit.com/mrdoob/three.js/master/examples/js/loaders/GLTFLoader.js"></script>
   <script type="module" src="./node_modules/three/examples/js/controls/OrbitControls.js"></script>
   <div id="scene">
-    <canvas class="scene_canvas"> 
-        <script src="./renderings.js"></script>
-    </canvas> 
+    <canvas id="scene_canvas"></canvas> 
   </div>
+  <script>
+    function setupAssignment() {
+        setupTask("scene_canvas", MeshOne, true);
+    }
+</script>
 </body>
 </html>

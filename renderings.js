@@ -503,7 +503,7 @@ function animate() {
     scene.add( plane_two );
     plane_two.position.y = 10;
     if (Mesh && Mesh.rotation) {
-        // camera.rotation.y -= 0.1;
+        camera.rotation.y -= 0.1;
     }
     renderer.render(scene, camera);
 }

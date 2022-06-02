@@ -1,45 +1,44 @@
-
-
-function setupTask(canvasID, taskFunction) {
+function setupTask(canvasId, taskFunction, useGl) {
     var canvas = document.getElementById(canvasId);
     if (!canvas) {
         console.log("Could not find canvas with id", canvasId);
         return;
     }
     
-    try {
-        var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
-    } catch (e) {}
-    if (!gl) {
-        console.log("Could not initialise WebGL");
-        return;
+    if (useGl) {
+        try {
+            var gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+        } catch (e) {}
+        if (!gl) {
+            console.log("Could not initialise WebGL");
+            return;
+        }
     }
-    
+
     var renderWidth, renderHeight;
     function computeCanvasSize() {
         renderWidth = Math.min(canvas.parentNode.clientWidth - 20, 820);
         renderHeight = Math.floor(renderWidth*9.0/16.0);
         canvas.width = renderWidth;
         canvas.height = renderHeight;
-        gl.viewport(0, 0, renderWidth, renderHeight);
+        if (gl)
+            gl.viewport(0, 0, renderWidth, renderHeight);
     }
-    
+
     window.addEventListener('resize', computeCanvasSize);
     computeCanvasSize();
 
-    var task = new taskFunction(gl);
+    var task = new taskFunction(canvas, gl);
 
     var mouseDown = false;
-    var lastMouseX, lastMouseY;
+    var lastMouseY;
     var mouseMoveListener = function(event) {
-        task.dragCamera(event.screenX - lastMouseX, event.screenY - lastMouseY);
-        lastMouseX = event.screenX;
+        task.dragCamera(event.screenY - lastMouseY);
         lastMouseY = event.screenY;
     };
     canvas.addEventListener('mousedown', function(event) {
         if (!mouseDown && event.button == 0) {
             mouseDown = true;
-            lastMouseX = event.screenX;
             lastMouseY = event.screenY;
             document.addEventListener('mousemove', mouseMoveListener);
         }
@@ -51,4 +50,12 @@ function setupTask(canvasID, taskFunction) {
             document.removeEventListener('mousemove', mouseMoveListener);
         }
     });
+
+    var renderLoop = function() {
+        task.render(canvas, gl, renderWidth, renderHeight);
+        window.requestAnimationFrame(renderLoop);
+    }
+    window.requestAnimationFrame(renderLoop);
+
+    return task;
 }
